@@ -3,10 +3,12 @@ package org.inlighting.controller;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.*;
 import org.apache.shiro.subject.Subject;
-import org.inlighting.bean.ResponseBean;
-import org.inlighting.database.UserService;
-import org.inlighting.database.UserBean;
+import org.inlighting.entity.ResponseBean;
+//import org.inlighting.database.UserService;
+//import org.inlighting.database.UserBean;
+import org.inlighting.entity.UserEntity;
 import org.inlighting.exception.UnauthorizedException;
+import org.inlighting.service.UserService;
 import org.inlighting.util.JWTUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +29,12 @@ public class WebController {
         this.userService = userService;
     }
 
-    //@PostMapping("/login")
     @RequestMapping("/login")
+    // @PostMapping("/login")
     public ResponseBean login(@RequestParam("username") String username,
                               @RequestParam("password") String password) {
-        UserBean userBean = userService.getUser(username);
-        if (userBean.getPassword().equals(password)) {
+        UserEntity userEntity = userService.getUserByName(username);
+        if (userEntity.getPassword().equals(password)) {
             return new ResponseBean(200, "Login success", JWTUtil.sign(username, password));
         } else {
             throw new UnauthorizedException();
