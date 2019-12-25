@@ -64,7 +64,6 @@ public class CookiesUtil {
         // new一个Cookie对象,键值对为参数
         Cookie cookie = new Cookie(name, value);
         // tomcat下多应用共享
-        cookie.setPath("/");
         // 如果cookie的值中含有中文时，需要对cookie进行编码，不然会产生乱码
         try {
             URLEncoder.encode(value, "utf-8");

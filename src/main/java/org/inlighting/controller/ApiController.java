@@ -9,6 +9,7 @@ import org.inlighting.entity.ResponseBean;
 import org.inlighting.entity.UserEntity;
 import org.inlighting.exception.UnauthorizedException;
 import org.inlighting.service.UserService;
+import org.inlighting.util.CookiesUtil;
 import org.inlighting.util.JWTUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
-public class WebController {
+@CrossOrigin(origins = "*", maxAge = 24*3600)
+@RequestMapping("/api")
+public class ApiController {
 
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -29,13 +35,19 @@ public class WebController {
         this.userService = userService;
     }
 
-    @RequestMapping("/login")
-    // @PostMapping("/login")
-    public ResponseBean login(@RequestParam("username") String username,
-                              @RequestParam("password") String password) {
+    @PostMapping("/login")
+    public ResponseBean login(HttpServletRequest request, HttpServletResponse response) {
+        //@RequestParam("username") String username, @RequestParam("password") String password
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
         UserEntity userEntity = userService.getUserByName(username);
         if (userEntity.getPassword().equals(password)) {
-            return new ResponseBean(200, "Login success", JWTUtil.sign(username, password));
+            String token = JWTUtil.sign(username, password);
+            Cookie cookie = new Cookie("Authorization", token);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+            return new ResponseBean(200, "Login success", token);
         } else {
             throw new UnauthorizedException();
         }

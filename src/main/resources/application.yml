@@ -1,13 +1,13 @@
 server:
   port:  8443
-#  http2:
-#    enabled: true
-#  ssl:
-#    enabled : true
-#    key-store: classpath:keystore.p12
-#    key-store-password: 123456
-#    key-store-type : PKCS12
-#    protocol : TLSv1.2
+  http2:
+    enabled: false
+  ssl:
+    enabled : false
+    key-store: classpath:keystore.p12
+    key-store-password: 123456
+    key-store-type : PKCS12
+    protocol : TLSv1.2
 
 debug: false
 
@@ -20,7 +20,7 @@ spring:
       cache: true
   thymeleaf:
     prefix : classpath:/templates/
-
+  #数据库配置
   datasource:
     url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
@@ -37,8 +37,13 @@ spring:
         max-active: 100
         max-idle: 10
         max-wait: 100000
+# Mybatis mapper 映射路径配置
+mybatis:
+  type-aliases-package: org.inlighting.mapper
+#  mapper-locations: classpath*:/mapper/**Mapper.xml
+  configLocation: classpath:mybatis-config.xml
 
-  mybatis:
-    type-aliases-package: org.inlighting.mapper
-#    mapper-locations: classpath:mapper/*.xml
-    configLocation: classpath:mybatis-config.xml
+# 日志输出
+logging:
+  level:
+    root: INFO

@@ -12,13 +12,14 @@ import org.springframework.stereotype.Component;
 public interface UserMapper {
 
     @Select("select * from users where user_id=#{id}")
-    UserEntity selectUserById(Integer id);
+    UserEntity selectUserById(Long id);
 
     @Select("select * from users where username=#{username}")
     UserEntity selectUserByName(String username);
 
-    @Insert("INSERT INTO users (username, password, role, permission) VALUES (#{username}, #{password}, #{role}, #{permission})")
+    @Insert("insert into users (username, password, role, permission) VALUES (#{username}, #{password}, #{role}, #{permission})")
     @Options(useGeneratedKeys = true, keyProperty = "user_id", keyColumn = "user_id")
     Long insertUser(UserEntity user);
+
 
 }

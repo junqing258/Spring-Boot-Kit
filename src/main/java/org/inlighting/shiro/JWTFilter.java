@@ -7,11 +7,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.regex.Pattern;
+
 
 public class JWTFilter extends BasicHttpAuthenticationFilter {
 
@@ -24,7 +28,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         HttpServletRequest req = (HttpServletRequest) request;
-        String authorization = req.getHeader("Authorization");
+        String authorization = getAuthorization(req);
         return authorization != null;
     }
 
@@ -33,21 +37,27 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String authorization = httpServletRequest.getHeader("Authorization");
+        HttpServletRequest req = (HttpServletRequest) request;
+        String authorization = getAuthorization(req);
 
-//        String cookie = httpServletRequest.getHeader("Cookie");
-//        LOGGER.info("===========cookie\t" + cookie);
+        LOGGER.warn("========== authorization ==========\t"+authorization);
 
         JWTToken token = new JWTToken(authorization);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         getSubject(request, response).login(token);
-
-        CookiesUtil.setCookie((HttpServletResponse)response, "token", token.getToken(), 10000);
-
-        LOGGER.info("===========setCookie\t" + token.getToken());
         // 如果没有抛出异常则代表登入成功，返回true
         return true;
+    }
+
+    private String getAuthorization(HttpServletRequest req) {
+        String authorization = req.getHeader("Authorization");
+        if (authorization == null || "".equals(authorization)) {
+            Cookie cookie = CookiesUtil.getCookieByName(req, "Authorization");
+            if (cookie != null) {
+                authorization = cookie.getValue();
+            }
+        }
+        return authorization;
     }
 
     /**
@@ -61,12 +71,18 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String path = httpServletRequest.getServletPath();
+
         if (isLoginAttempt(request, response)) {
             try {
                 executeLogin(request, response);
             } catch (Exception e) {
-                response401(request, response);
+                e.printStackTrace();
+                responseLogin(request, response);
             }
+        } else if (Pattern.compile("/api/*").matcher(path).find() == false) {
+            responseLogin(request, response);
         }
         return true;
     }
@@ -92,10 +108,10 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     /**
      * 将非法请求跳转到 /401
      */
-    private void response401(ServletRequest req, ServletResponse resp) {
+    private void responseLogin(ServletRequest req, ServletResponse resp) {
         try {
             HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
-            httpServletResponse.sendRedirect("/401");
+            httpServletResponse.sendRedirect("/login");
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }

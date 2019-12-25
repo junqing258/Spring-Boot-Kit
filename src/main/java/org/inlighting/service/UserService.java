@@ -4,7 +4,7 @@ import org.inlighting.entity.UserEntity;
 
 public interface UserService {
 
-    UserEntity getUserById(Integer id);
+    UserEntity getUserById(Long id);
 
 
     UserEntity getUserByName(String username);
