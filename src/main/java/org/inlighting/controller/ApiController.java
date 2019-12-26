@@ -4,18 +4,18 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.*;
 import org.apache.shiro.subject.Subject;
 import org.inlighting.entity.ResponseBean;
-//import org.inlighting.database.UserService;
-//import org.inlighting.database.UserBean;
 import org.inlighting.entity.UserEntity;
 import org.inlighting.exception.UnauthorizedException;
 import org.inlighting.service.UserService;
-import org.inlighting.util.CookiesUtil;
 import org.inlighting.util.JWTUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +35,7 @@ public class ApiController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @PostMapping(value="/login", produces="application/json")
     public ResponseBean login(HttpServletRequest request, HttpServletResponse response) {
         //@RequestParam("username") String username, @RequestParam("password") String password
         String username = request.getParameter("username");
@@ -47,7 +47,10 @@ public class ApiController {
             cookie.setPath("/");
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
-            return new ResponseBean(200, "Login success", token);
+            Map<String,Object> result = new HashMap<>();
+            result.put("token", token);
+            result.put("info", userEntity);
+            return new ResponseBean(200, "Login success", result);
         } else {
             throw new UnauthorizedException();
         }
