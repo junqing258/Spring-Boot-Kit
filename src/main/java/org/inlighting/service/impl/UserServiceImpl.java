@@ -1,10 +1,15 @@
 package org.inlighting.service.impl;
 
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.inlighting.entity.UserEntity;
 import org.inlighting.mapper.UserMapper;
 import org.inlighting.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import org.apache.commons.lang.RandomStringUtils;
+
+import java.util.Date;
 
 @Service("userService")
 public class UserServiceImpl  implements UserService {
@@ -24,6 +29,12 @@ public class UserServiceImpl  implements UserService {
 
     @Override
     public Long saveUser(UserEntity user) {
+        user.setCreateTime(new Date());
+        //sha256加密
+        String salt = RandomStringUtils.randomAlphanumeric(20);
+        user.setPassword(new Sha256Hash(user.getPassword(), salt).toHex());
+        user.setSalt(salt);
+
         return userMapper.insertUser(user);
     }
 }

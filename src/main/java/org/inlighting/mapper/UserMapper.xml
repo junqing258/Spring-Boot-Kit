@@ -12,6 +12,15 @@
         <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     </resultMap>
 
+    <parameterMap id="UserParameterMap" type="org.inlighting.entity.UserEntity" >
+        <parameter resultMap="user_id" property="userId" jdbcType="INTEGER" />
+        <parameter resultMap="username" property="username" jdbcType="VARCHAR" />
+        <parameter resultMap="role" property="role" jdbcType="VARCHAR" />
+        <parameter resultMap="permission" property="permission" jdbcType="VARCHAR" />
+        <parameter resultMap="password" property="password" jdbcType="VARCHAR" />
+        <parameter resultMap="mobile" property="mobile" jdbcType="VARCHAR" />
+    </parameterMap>
+
     <select id="selectUserById" resultMap="UserResultMap" parameterType="long" >
         select * from users where user_id=#{id,jdbcType=INTEGER}
     </select>
@@ -20,9 +29,25 @@
        	select * from users where username=#{username}
     </select>
 
-    <insert id="insertUser" parameterType="org.inlighting.entity.UserEntity"
-        useGeneratedKeys="true" keyProperty="user_id" keyColumn="user_id">
-         insert into users (username, password, role, permission) VALUES (#{username}, #{password}, #{role}, #{permission})
+    <insert id="insertUser" parameterMap="UserParameterMap" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        INSERT INTO `users` (
+            `username`,
+            `password`,
+            `salt`,
+            `role`,
+            `email`,
+            `mobile`,
+            `create_time`
+        )
+        VALUES (
+            #{username},
+            #{password},
+            #{salt},
+            #{role},
+            #{email},
+            #{mobile},
+            #{createTime}
+        )
     </insert>
 
 </mapper>

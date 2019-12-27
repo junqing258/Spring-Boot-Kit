@@ -15,7 +15,28 @@ public class UserEntity implements Serializable {
      */
     private String username;
 
-    private  String role;
+    private String role;
+
+    /**
+     * 手机号
+     */
+    private String mobile;
+    /**
+     * 密码
+     */
+    private String password;
+
+    private String salt;
+
+    private String email;
+
+    private String permission;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
 
     public String getRole() {
         return role;
@@ -32,8 +53,6 @@ public class UserEntity implements Serializable {
     public void setPermission(String permission) {
         this.permission = permission;
     }
-
-    private  String permission;
 
     public Long getUserId() {
         return userId;
@@ -67,17 +86,28 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
-    /**
-     * 手机号
-     */
-    private String mobile;
-    /**
-     * 密码
-     */
-    private String password;
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+    public String getSalt() {
+        return salt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
 }

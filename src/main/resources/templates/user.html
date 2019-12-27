@@ -5,16 +5,37 @@
     <title>User</title>
 </head>
 <body>
-<form id="userFrom" action="/api/update_user" method="POST" enctype="multipart/form-data">
-    <input type="text" name="userId"/>
+<form id="userFrom" action="/api/user_update" method="POST">
+    <!--<input type="text" name="userId"/>-->
     <input type="text" name="username"/>
     <input type="password" name="password"/>
     <input type="text" name="mobile"/>
+    <input type="button" value="增加" onclick="addUser()">
     <input type="submit" value="修改"/>
 </form>
 </body>
 <script>
-    window.addEventListener("DOMContentLoaded", init);
+    // window.addEventListener("DOMContentLoaded", init);
+    
+    function addUser() {
+        const data = {
+            username: "username",
+            password: "password",
+            mobile: 123123123
+        };
+        fetch("/api/add", {
+            credentials: 'include',
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify(data)
+        }).then(function (response) {
+            return response.json();
+        }).then(function (rep) {
+            console.log("add", rep);
+        });
+    }
 
     function init() {
         fetch("/api/user_info").then(function (response) {

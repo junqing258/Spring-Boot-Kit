@@ -1,10 +1,12 @@
 package org.inlighting.controller;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.subject.Subject;
 import org.inlighting.entity.ResponseBean;
 import org.inlighting.entity.UserEntity;
@@ -71,34 +73,44 @@ public class ApiController {
     }
 
 
-    @PostMapping(value="/login", produces="application/json")
+    @PostMapping(value="/login")
     public ResponseBean login(HttpServletRequest request, HttpServletResponse response) {
         //@RequestParam("username") String username, @RequestParam("password") String password
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        UserEntity userEntity = userService.getUserByName(username);
-        if (userEntity.getPassword().equals(password)) {
-            String token = JWTUtil.sign(username, password);
+
+        UserEntity user = userService.getUserByName(username);
+        String salt = user.getSalt();
+        String secret = new Sha256Hash(password, salt).toHex();
+
+        if (user.getPassword().equals(secret)) {
+            String token = JWTUtil.sign(username, secret);
             Cookie cookie = new Cookie("Authorization", token);
             cookie.setPath("/");
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
             Map<String,Object> result = new HashMap<>();
             result.put("token", token);
-            result.put("info", userEntity);
+            result.put("info", user);
             return new ResponseBean(200, "Login success", result);
         } else {
             throw new UnauthorizedException();
         }
     }
 
-    @GetMapping("/user_info")
+    @RequestMapping("/user_info")
     @RequiresAuthentication
     public ResponseBean userInfo() { /*@PathVariable("id")long id*/
         String principals = (String) SecurityUtils.getSubject().getPrincipal();
         String username = JWTUtil.getUsername(principals);
         UserEntity userEntity = userService.getUserByName(username);
         return new ResponseBean(200, "success", userEntity);
+    }
+
+    @RequestMapping(value="/add_user")
+    public ResponseBean addUser(@RequestBody UserEntity user) {
+        userService.saveUser(user);
+        return new ResponseBean(200, "success", null);
     }
 
     @GetMapping("/article")

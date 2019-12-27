@@ -14,13 +14,6 @@ public class ViewController {
 
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private UserService userService;
-
-    @Autowired
-    public void setService(UserService userService) {
-        this.userService = userService;
-    }
-
     @GetMapping("/login")
     public String login(Model model) {
         return "login";
@@ -34,7 +27,6 @@ public class ViewController {
     }
 
     @GetMapping("/user")
-    @RequiresAuthentication
     public String user(Model model) {
         return "user";
     }
