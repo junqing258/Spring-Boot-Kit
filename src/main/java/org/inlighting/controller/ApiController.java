@@ -56,6 +56,13 @@ public class ApiController {
         }
     }
 
+    @GetMapping("/user/{id}")
+    @RequiresAuthentication
+    public ResponseBean user(@PathVariable("id")long id) {
+        UserEntity userEntity = userService.getUserById(id);
+        return new ResponseBean(200, "You are already logged in", userEntity);
+    }
+
     @GetMapping("/article")
     public ResponseBean article() {
         Subject subject = SecurityUtils.getSubject();

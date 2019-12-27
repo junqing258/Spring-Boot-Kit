@@ -34,4 +34,10 @@ public class ViewController {
         return "index";
     }
 
+    @GetMapping("/user")
+    @RequiresAuthentication
+    public String user(Model model) {
+        return "user";
+    }
+
 }

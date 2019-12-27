@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<form action="/api/update_user" method="POST">
+    <input type="text" name="username"/>
+    <input type="password" name="password"/>
+    <input type="submit" value="登录"/>
+</form>
+</body>
+<script>
+    window.addEventListener("DomContendLoaded", init);
+
+    function init(){
+        fetch("/api/user")
+            .then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                console.log("user", data);
+            });
+    }
+</script>
+</html>
