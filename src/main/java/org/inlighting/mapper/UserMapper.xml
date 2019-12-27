@@ -16,7 +16,7 @@
         select * from users where user_id=#{id,jdbcType=INTEGER}
     </select>
 
-    <select id="selectUserByName" resultType="org.inlighting.entity.UserEntity" parameterType="String" >
+    <select id="selectUserByName" resultMap="UserResultMap" parameterType="String" >
        	select * from users where username=#{username}
     </select>
 

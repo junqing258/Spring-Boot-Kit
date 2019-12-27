@@ -5,22 +5,30 @@
     <title>User</title>
 </head>
 <body>
-<form action="/api/update_user" method="POST">
+<form id="userFrom" action="/api/update_user" method="POST" enctype="multipart/form-data">
+    <input type="text" name="userId"/>
     <input type="text" name="username"/>
     <input type="password" name="password"/>
-    <input type="submit" value="登录"/>
+    <input type="text" name="mobile"/>
+    <input type="submit" value="修改"/>
 </form>
 </body>
 <script>
-    window.addEventListener("DomContendLoaded", init);
+    window.addEventListener("DOMContentLoaded", init);
 
-    function init(){
-        fetch("/api/user")
-            .then(function (response) {
-                return response.json();
-            }).then(function (data) {
-                console.log("user", data);
-            });
+    function init() {
+        fetch("/api/user_info").then(function (response) {
+            return response.json();
+        }).then(function (rep) {
+            let data = rep.data;
+            console.log("user", data);
+            for (let name in data) {
+                let ele = document.getElementsByName(name);
+                if (ele && ele.length) {
+                    ele[0].value = data[name];
+                }
+            }
+        });
     }
 </script>
 </html>

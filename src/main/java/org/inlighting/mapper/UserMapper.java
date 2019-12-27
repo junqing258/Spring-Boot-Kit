@@ -1,7 +1,7 @@
 package org.inlighting.mapper;
 
-import org.inlighting.entity.UserEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.inlighting.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component

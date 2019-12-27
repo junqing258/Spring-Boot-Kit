@@ -1,7 +1,10 @@
 package org.inlighting.controller;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.*;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.inlighting.entity.ResponseBean;
 import org.inlighting.entity.UserEntity;
@@ -14,15 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 24*3600)
 @RequestMapping("/api")
 public class ApiController {
 
@@ -56,11 +57,13 @@ public class ApiController {
         }
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/user_info")
     @RequiresAuthentication
-    public ResponseBean user(@PathVariable("id")long id) {
-        UserEntity userEntity = userService.getUserById(id);
-        return new ResponseBean(200, "You are already logged in", userEntity);
+    public ResponseBean userInfo() { /*@PathVariable("id")long id*/
+        String principals = (String) SecurityUtils.getSubject().getPrincipal();
+        String username = JWTUtil.getUsername(principals);
+        UserEntity userEntity = userService.getUserByName(username);
+        return new ResponseBean(200, "success", userEntity);
     }
 
     @GetMapping("/article")

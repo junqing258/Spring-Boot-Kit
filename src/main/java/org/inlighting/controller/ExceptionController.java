@@ -4,7 +4,9 @@ import org.apache.shiro.ShiroException;
 import org.inlighting.entity.ResponseBean;
 import org.inlighting.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 

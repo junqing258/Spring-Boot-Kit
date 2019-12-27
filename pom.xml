@@ -16,7 +16,7 @@
     </properties>
 
     <groupId>org.inlighting</groupId>
-    <artifactId>SqWing</artifactId>
+    <artifactId>skwing</artifactId>
     <version>1.1</version>
 
     <dependencies>
