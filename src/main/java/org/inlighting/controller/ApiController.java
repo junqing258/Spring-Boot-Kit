@@ -9,6 +9,7 @@ import org.apache.shiro.subject.Subject;
 import org.inlighting.entity.ResponseBean;
 import org.inlighting.entity.UserEntity;
 import org.inlighting.exception.UnauthorizedException;
+import org.inlighting.service.RedisService;
 import org.inlighting.service.UserService;
 import org.inlighting.util.JWTUtil;
 import org.slf4j.Logger;
@@ -29,12 +30,46 @@ public class ApiController {
 
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private RedisService redisService;
+
     private UserService userService;
 
     @Autowired
     public void setService(UserService userService) {
         this.userService = userService;
     }
+
+
+    /**
+     * 向redis存储值
+     * @param key
+     * @param value
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/set")
+    public String set(String key, String value) throws Exception{
+
+        redisService.set(key, value);
+        return "success";
+    }
+
+    /**
+     * 获取redis中的值
+     * @param key
+     * @return
+     */
+    @RequestMapping("/get")
+    public String get(String key){
+        try {
+            return redisService.get(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
     @PostMapping(value="/login", produces="application/json")
     public ResponseBean login(HttpServletRequest request, HttpServletResponse response) {
