@@ -3,6 +3,7 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL COMMENT '用户名',
   `password` varchar(100) DEFAULT NULL COMMENT '密码',
   `salt` varchar(20) DEFAULT NULL COMMENT '盐',
+  `nickname` varchar(50) NOT NULL COMMENT '别名',
   `role` varchar(20) DEFAULT NULL COMMENT '角色',
   `permission` varchar(40) DEFAULT NULL COMMENT '角色',
   `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
