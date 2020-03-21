@@ -3,28 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>User</title>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 </head>
 <body>
 <form id="userFrom" action="/api/user_update" method="POST">
     <!--<input type="text" name="userId"/>-->
-    <input type="text" name="username"/>
-    <input type="password" name="password"/>
-    <input type="text" name="mobile"/>
+    <label>username</label>
+    <input type="text" name="username" id="name_field"/><br/>
+    <label>password</label>
+    <input type="password" name="password" id="password_field"/><br/>
+    <label>mobile</label>
+    <input type="text" name="mobile" id="mobile_field"/><br/>
     <input type="button" value="增加" onclick="addUser()">
-    <input type="submit" value="修改"/>
+    <input type="submit" value="修改"/><br/>
 </form>
 </body>
 <script>
     // window.addEventListener("DOMContentLoaded", init);
-    
+
     function addUser() {
         const data = {
-            username: "username",
-            password: "password",
-            mobile: 123123123
+            username: document.getElementById('name_field').value,
+            password: document.getElementById('password_field').value,
+            mobile: document.getElementById('mobile_field').value
         };
-        fetch("/api/add", {
+        fetch("/api/add_user", {
             credentials: 'include',
             method: "POST",
             headers: {

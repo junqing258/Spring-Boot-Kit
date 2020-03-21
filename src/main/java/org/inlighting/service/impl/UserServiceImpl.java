@@ -32,7 +32,11 @@ public class UserServiceImpl  implements UserService {
         user.setCreateTime(new Date());
         //sha256加密
         String salt = RandomStringUtils.randomAlphanumeric(20);
-        user.setPassword(new Sha256Hash(user.getPassword(), salt).toHex());
+
+        String password = user.getPassword();
+        String secret = new Sha256Hash(password, salt).toHex();
+
+        user.setPassword(secret);
         user.setSalt(salt);
 
         return userMapper.insertUser(user);

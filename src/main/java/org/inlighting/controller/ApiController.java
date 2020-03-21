@@ -74,10 +74,10 @@ public class ApiController {
 
 
     @PostMapping(value="/login")
-    public ResponseBean login(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseBean login(@RequestBody UserEntity loginUser, HttpServletResponse response) {
         //@RequestParam("username") String username, @RequestParam("password") String password
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String username = loginUser.getUsername();
+        String password = loginUser.getPassword();
 
         UserEntity user = userService.getUserByName(username);
         String salt = user.getSalt();
