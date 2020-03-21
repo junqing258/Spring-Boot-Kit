@@ -3,12 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 </head>
 <body>
-    <form action="/api/login" method="POST">
-        <input type="text" name="username"/>
-        <input type="password" name="password"/>
-        <input type="submit" value="登录"/>
+
+    <form id="login_form">
+        <input type="text" name="username" id="name_field"/>
+        <input type="password" name="password" id="password_field"/>
+        <input type="button" value="登录" onclick="login()"/>
     </form>
+
+    <script>
+        function login() {
+            $.ajax({
+                url: "/api/login",
+                method: "POST",
+                data: {
+                    username: $("#name_field").val(),
+                    password: $("#password_field").val()
+                },
+                success: function(){
+                    $(this).addClass("done");
+                }
+            });
+        }
+    </script>
+
 </body>
 </html>

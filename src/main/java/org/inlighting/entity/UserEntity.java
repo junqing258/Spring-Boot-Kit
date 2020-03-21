@@ -26,7 +26,7 @@ public class UserEntity implements Serializable {
      */
     private String password;
 
-    private String salt;
+//    private String salt;
 
     private String email;
 
@@ -86,9 +86,9 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
-    public String getSalt() {
-        return salt;
-    }
+//    public String getSalt() {
+//        return salt;
+//    }
 
     public String getEmail() {
         return email;
@@ -98,9 +98,9 @@ public class UserEntity implements Serializable {
         this.email = email;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
+//    public void setSalt(String salt) {
+//        this.salt = salt;
+//    }
 
     public Date getCreateTime() {
         return createTime;
