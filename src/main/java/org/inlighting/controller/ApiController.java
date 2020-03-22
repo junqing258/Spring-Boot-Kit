@@ -88,6 +88,7 @@ public class ApiController {
             Cookie cookie = new Cookie("Authorization", token);
             cookie.setPath("/");
             cookie.setHttpOnly(true);
+            cookie.setMaxAge(3600*30);
             response.addCookie(cookie);
             Map<String,Object> result = new HashMap<>();
             result.put("token", token);
