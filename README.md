@@ -1,6 +1,6 @@
 # Shiro+JWT+Spring Boot Restful Stater
 
-    SpringBoot微服务
+    SpringBoot 微服务
     SprigMVC resful接口
     MySql 数据源
     MyBatis 数据库操作
