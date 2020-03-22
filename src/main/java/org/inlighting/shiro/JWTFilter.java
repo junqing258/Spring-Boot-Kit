@@ -4,8 +4,6 @@ import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.inlighting.util.CookiesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -13,7 +11,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 
 public class JWTFilter extends BasicHttpAuthenticationFilter {
@@ -68,9 +65,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-//        String path = httpServletRequest.getServletPath();
-
         if (isLoginAttempt(request, response)) {
             try {
                 executeLogin(request, response);
@@ -78,9 +72,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
                 e.printStackTrace();
                 responseLogin(request, response);
             }
-        } /*else if (Pattern.compile("/api/*").matcher(path).find() == false) {
-            responseLogin(request, response);
-        }*/
+        }
         return true;
     }
 
