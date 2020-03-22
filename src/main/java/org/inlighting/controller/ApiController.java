@@ -2,6 +2,7 @@ package org.inlighting.controller;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -80,6 +81,9 @@ public class ApiController {
         String password = loginUser.getPassword();
 
         UserEntity user = userService.getUserByName(username);
+        if (user == null) {
+            throw new AuthenticationException("User didn't existed!");
+        }
         String salt = user.getSalt();
         String secret = new Sha256Hash(password, salt).toHex();
 
