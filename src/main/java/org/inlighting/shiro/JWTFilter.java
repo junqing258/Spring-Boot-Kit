@@ -38,9 +38,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest req = (HttpServletRequest) request;
         String authorization = getAuthorization(req);
-
-        LOGGER.warn("========== authorization ==========\t"+authorization);
-
+//        LOGGER.info("========== authorization ==========\t" + authorization);
         JWTToken token = new JWTToken(authorization);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         getSubject(request, response).login(token);
@@ -71,7 +69,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String path = httpServletRequest.getServletPath();
+//        String path = httpServletRequest.getServletPath();
 
         if (isLoginAttempt(request, response)) {
             try {
@@ -80,9 +78,9 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
                 e.printStackTrace();
                 responseLogin(request, response);
             }
-        } else if (Pattern.compile("/api/*").matcher(path).find() == false) {
+        } /*else if (Pattern.compile("/api/*").matcher(path).find() == false) {
             responseLogin(request, response);
-        }
+        }*/
         return true;
     }
 
