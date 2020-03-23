@@ -22,14 +22,13 @@ spring:
     prefix: classpath:/templates/
     #数据库配置
   datasource:
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://101.132.27.58:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: 1234@Abcd
-    # 使用druid数据源
-    type: com.alibaba.druid.pool.DruidDataSource
+    password: Junqing@2020
     driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
   redis:
-    host: 127.0.0.1
+    host: 101.132.27.58
     #redis密码，没有密码的可以用～表示
     password: ~
     pool:
@@ -38,9 +37,19 @@ spring:
       max-wait: 100000
 # Mybatis mapper 映射路径配置
 mybatis:
-   # mapper-locations: classpath:mapper/*.xml
-   config-location: classpath:mybatis-config.xml
-
+  # mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:mybatis-config.xml
+dubbo:
+#  server: true
+  application:
+    name: service-inlighting
+  registry:
+    address: zookeeper://101.132.27.58:2181
+  protocol:
+    name: dubbo
+    port: 20880
+  scan:
+    basePackages: org.inlighting.dubbo.provider.service
 # 日志输出
 logging:
   level:
