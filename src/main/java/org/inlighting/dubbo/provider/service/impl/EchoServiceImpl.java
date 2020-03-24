@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 @Service(interfaceClass = IEchoService.class, version = "1.0.0")
+@Component
 public class EchoServiceImpl implements IEchoService {
     @Override
     public String echo(String content) {

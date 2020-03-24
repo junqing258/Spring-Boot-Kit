@@ -12,6 +12,7 @@ server:
 debug: false
 
 spring:
+  env: dev
   resources:
     cache:
       period: 604800
@@ -35,21 +36,20 @@ spring:
       max-active: 100
       max-idle: 10
       max-wait: 100000
+  dubbo:
+    application:
+      name: provider
+    server: true
+    registry:
+      address: N/A
+#      zookeeper://101.132.27.58:2181
+    protocol:
+      name: dubbo
+      port: 20880
 # Mybatis mapper 映射路径配置
 mybatis:
   # mapper-locations: classpath:mapper/*.xml
   config-location: classpath:mybatis-config.xml
-dubbo:
-#  server: true
-  application:
-    name: service-inlighting
-  registry:
-    address: zookeeper://101.132.27.58:2181
-  protocol:
-    name: dubbo
-    port: 20880
-  scan:
-    basePackages: org.inlighting.dubbo.provider.service
 # 日志输出
 logging:
   level:
