@@ -1,6 +1,5 @@
 package org.inlighting.controller;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.annotation.Logical;
@@ -22,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,6 +89,7 @@ public class ApiController {
             String token = JWTUtil.sign(username, secret);
             Cookie cookie = new Cookie("Authorization", token);
             cookie.setPath("/");
+//            cookie.setDomain(request.get);
             cookie.setHttpOnly(true);
             cookie.setMaxAge(3600*30);
             response.addCookie(cookie);

@@ -1,6 +1,5 @@
 package org.inlighting.service;
-
-        import org.inlighting.entity.UserEntity;
+import org.inlighting.entity.UserEntity;
 
 public interface UserService {
 
